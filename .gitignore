@@ -1,5 +1,9 @@
+*.Bak
 *.bak
 *.obj
 *.lst
 *.hex
 *.lnp
+
+project-three*
+*.__i
