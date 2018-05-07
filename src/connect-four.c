@@ -8,6 +8,10 @@ void board_draw();
 void player_turn(unsigned char player);
 unsigned char check_win(unsigned char player);
 void size_select();
+void play_note(unsigned char note, unsigned char numb_plays);
+void delay_counts(unsigned char low, unsigned char high);
+void main_song();
+unsigned char draw();
 
 void led_control(unsigned char ctrl);
 
@@ -45,11 +49,16 @@ sbit btn6 = P2^1;
 sbit btn7 = P0^3;
 sbit btn8 = P2^2;
 
+// Speaker
+sbit speaker = P1^7;
+
 void main(void)
 {
 	unsigned char current_player = SPACE_O; // changed to SPACE_X at start
 
 	init();
+
+	main_song();
 	
 	size_select();
 
@@ -67,12 +76,24 @@ void main(void)
 			player_turn(current_player);
 			board_draw();
 
-		} while (check_win(current_player) == 0);
-		
+		} while (check_win(current_player) == 0 && (draw() == 0));
+
 		// print win message
-		uart_transmit(current_player);
-		print(" wins! Press any button to play another game.\r\n");
-		
+		if (draw() == 1)
+		{	
+			play_note(0,5);
+		    play_note(11,5);
+		    play_note(8,5);
+		    play_note(5,5);
+		    play_note(1,5);
+		    play_note(0,15);
+			print("There was a draw! Good luck next time. Hit any button to try again.");
+		}
+		else
+		{
+			uart_transmit(current_player);
+			print(" wins! Press any button to play another game.\r\n");
+		}
 		// wait for user to press to restart
 		while (~btn0|~btn1|~btn2|~btn3|~btn4|~btn5|~btn6|~btn7|~btn8);
 
@@ -81,6 +102,25 @@ void main(void)
 
 	} while (1);
 	
+}
+
+unsigned char draw()
+{
+	unsigned char i;
+	unsigned char j;
+	unsigned char draw = 1;
+
+	for (i = 0; i < size; i++)
+	{
+		for (j = 0; j < size - 1; j++)
+		{
+			if (board[i][j] == SPACE_EMPTY)
+			{
+				draw = 0;
+			}
+		}
+	}
+	return draw;
 }
 
 void board_construct()
@@ -165,7 +205,7 @@ void player_turn(unsigned char player)
 			break;
 		}
 	}
-	
+
 	// wait for user to release before returning
 	while (btn0&btn1&btn2&btn3&btn4&btn5&btn6&btn7&btn8);
 }
@@ -352,4 +392,183 @@ void print(char* str)
 void clear_display(void)
 {
 	print("\033[2J\033[H"); // literally magic
+}
+
+void main_song()
+{
+	play_note(3,3);
+	play_note(2,4);
+	play_note(1,5);
+	play_note(5,3);
+	play_note(3,6);
+	play_note(8,2);
+	play_note(2,1);
+	play_note(9,9);
+	play_note(12,2);
+	play_note(4,8);
+	play_note(10,6);
+	play_note(12,12);
+}
+
+
+
+void play_note(unsigned char note, unsigned char numb_plays)
+{
+  unsigned char i;
+  unsigned char j;
+  unsigned char length;
+  unsigned char low;
+  unsigned char high;
+
+
+  switch(note)
+  {
+    case 0:  //rest...not a note, lasts same length as the other 1/16th notes
+      high = 0x8f;
+      low = 0x7d;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < 1; j++)
+        {
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 1:  //C5
+      length = 65;
+      high = 0x0fc;
+      low = 0x8f;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 3:  //D5
+      length = 73;
+      high = 0x0fc;
+      low = 0x0ef;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 5:  //E5
+      length = 82;
+      high = 0x0fd;
+      low = 0x45;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 6:  //F5
+      length = 87;
+      high = 0x0fd;
+      low = 0x6c;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 8:  //G5
+      length = 98;
+      high = 0x0fd;
+      low = 0xb4;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 10:  //A5
+      length = 110;
+      high = 0x0fd;
+      low = 0x0f4;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 11:  //AS5
+      length = 117;
+      high = 0x0fe;
+      low = 0x11;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+    case 13:  //C6
+      length = 131;
+      high = 0x0fe;
+      low = 0x47;
+      for(i = 0; i < numb_plays; i++)
+      {
+        for(j = 0; j < length; j++)
+        {
+          speaker = 0;
+          delay_counts(low,high);
+          speaker = 1;
+          delay_counts(low,high);
+        }
+      }
+      break;
+  }
+  return;
+}
+void delay_counts(unsigned char low, unsigned char high)
+{
+  if(low > 0 || high > 0)
+  {
+    TMOD = 0x01;//timer 0, mode 1
+    TL0 = low;
+    TH0 = high;   
+    TR0 = 1; //start timer
+
+    while(!TF0);
+    TR0 = 0; //stop timer
+    TF0 = 0; //clear flag
+  }
+  return;
 }
