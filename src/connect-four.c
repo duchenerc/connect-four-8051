@@ -7,6 +7,7 @@ void board_construct();
 void board_draw();
 void player_turn(unsigned char player);
 unsigned char check_win(unsigned char player);
+void size_select();
 
 void led_control(unsigned char ctrl);
 
@@ -48,10 +49,10 @@ void main(void)
 {
 	unsigned char current_player = SPACE_O; // changed to SPACE_X at start
 
-	size = 7; // remove later, allow user to pick size
-
 	init();
 	
+	size_select();
+
 	do
 	{
 		board_construct();
@@ -242,6 +243,37 @@ unsigned char check_win(unsigned char player)
 	}
 
 	return 0;
+}
+
+void size_select(void)
+{
+	clear_display();
+	print("Choose a size: 5, 6, or 7\r\n");
+	led_control(CTRL_SIZE);
+	
+	while (1)
+	{
+		if (~btn0|~btn3|~btn6)
+		{
+			size = 5;
+			break;
+		}
+
+		if (~btn1|~btn4|~btn7)
+		{
+			size = 6;
+			break;
+		}
+
+		if (~btn2|~btn5|~btn8)
+		{
+			size = 7;
+			break;
+		}
+	}
+
+	while (btn0&btn1&btn2&btn3&btn4&btn5&btn6&btn7&btn8); // wait for release
+
 }
 
 void init()
