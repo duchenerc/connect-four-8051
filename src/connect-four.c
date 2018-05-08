@@ -49,6 +49,8 @@ sbit btn6 = P2^1;
 sbit btn7 = P0^3;
 sbit btn8 = P2^2;
 
+sbit o_led = P1^3;
+
 // Speaker
 sbit speaker = P1^7;
 
@@ -64,6 +66,7 @@ void main(void)
 
 	do
 	{
+		o_led = 1;
 		board_construct();
 		board_draw();
 
@@ -91,8 +94,16 @@ void main(void)
 		}
 		else
 		{
+			play_note(9,9);
+			play_note(8,7);
+			play_note(12,5);
+			play_note(2,8);
+			play_note(4,8);
+
 			uart_transmit(current_player);
 			print(" wins! Press any button to play another game.\r\n");
+
+			o_led = 0;
 		}
 		// wait for user to press to restart
 		while (~btn0|~btn1|~btn2|~btn3|~btn4|~btn5|~btn6|~btn7|~btn8);
