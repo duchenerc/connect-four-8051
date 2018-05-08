@@ -425,161 +425,161 @@ void main_song()
 
 void play_note(unsigned char note, unsigned char numb_plays)
 {
-  unsigned char i;
-  unsigned char j;
-  unsigned char length;
-  unsigned char low;
-  unsigned char high;
+    unsigned char i;
+    unsigned char j;
+    unsigned char length;
+    unsigned char low;
+    unsigned char high;
 
 
-  switch(note)
-  {
-    case 0:  //rest...not a note, lasts same length as the other 1/16th notes
-      high = 0x8f;
-      low = 0x7d;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < 1; j++)
-        {
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 1:  //C5
-      length = 65;
-      high = 0x0fc;
-      low = 0x8f;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 3:  //D5
-      length = 73;
-      high = 0x0fc;
-      low = 0x0ef;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 5:  //E5
-      length = 82;
-      high = 0x0fd;
-      low = 0x45;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 6:  //F5
-      length = 87;
-      high = 0x0fd;
-      low = 0x6c;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 8:  //G5
-      length = 98;
-      high = 0x0fd;
-      low = 0xb4;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 10:  //A5
-      length = 110;
-      high = 0x0fd;
-      low = 0x0f4;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 11:  //AS5
-      length = 117;
-      high = 0x0fe;
-      low = 0x11;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-    case 13:  //C6
-      length = 131;
-      high = 0x0fe;
-      low = 0x47;
-      for(i = 0; i < numb_plays; i++)
-      {
-        for(j = 0; j < length; j++)
-        {
-          speaker = 0;
-          delay_counts(low,high);
-          speaker = 1;
-          delay_counts(low,high);
-        }
-      }
-      break;
-  }
-  return;
+    switch(note)
+    {
+        case 0:  //rest...not a note, lasts same length as the other 1/16th notes
+            high = 0x8f;
+            low = 0x7d;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < 1; j++)
+                {
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 1:  //C5
+            length = 65;
+            high = 0x0fc;
+            low = 0x8f;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 3:  //D5
+            length = 73;
+            high = 0x0fc;
+            low = 0x0ef;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 5:  //E5
+            length = 82;
+            high = 0x0fd;
+            low = 0x45;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 6:  //F5
+            length = 87;
+            high = 0x0fd;
+            low = 0x6c;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 8:  //G5
+            length = 98;
+            high = 0x0fd;
+            low = 0xb4;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 10:  //A5
+            length = 110;
+            high = 0x0fd;
+            low = 0x0f4;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 11:  //AS5
+            length = 117;
+            high = 0x0fe;
+            low = 0x11;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+        case 13:  //C6
+            length = 131;
+            high = 0x0fe;
+            low = 0x47;
+            for(i = 0; i < numb_plays; i++)
+            {
+                for(j = 0; j < length; j++)
+                {
+                    speaker = 0;
+                    delay_counts(low,high);
+                    speaker = 1;
+                    delay_counts(low,high);
+                }
+            }
+            break;
+    }
+    return;
 }
 void delay_counts(unsigned char low, unsigned char high)
 {
-  if(low > 0 || high > 0)
-  {
-    TMOD = 0x01;//timer 0, mode 1
-    TL0 = low;
-    TH0 = high;   
-    TR0 = 1; //start timer
-
-    while(!TF0);
-    TR0 = 0; //stop timer
-    TF0 = 0; //clear flag
-  }
-  return;
+    if(low > 0 || high > 0)
+    {
+        TMOD = 0x01;//timer 0, mode 1
+        TL0 = low;
+        TH0 = high;   
+        TR0 = 1; //start timer
+    
+        while(!TF0);
+        TR0 = 0; //stop timer
+        TF0 = 0; //clear flag
+    }
+    return;
 }
