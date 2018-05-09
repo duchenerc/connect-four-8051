@@ -1,21 +1,30 @@
 #include "reg932.h"
 #include "uart.h"
 
+// Sets bidirectional ports and preps LEDs
 void init();
 
 void board_construct();
+// Draws the board on the screen
 void board_draw();
 void player_turn(unsigned char player);
+// Determine if a player has four in a row.
 unsigned char check_win(unsigned char player);
+// This is the difficulty selector. The larger the harder.
 void size_select();
+// This plays a note for a certain length (numb_plays)
 void play_note(unsigned char note, unsigned char numb_plays);
 void delay_counts(unsigned char low, unsigned char high);
+// Plays a tune on startup.
 void main_song();
-unsigned char draw();
+unsigned char draw(); // This returns 1 if there is a draw
 
+// Controls which player turn it is. Displays an X or an O
 void led_control(unsigned char ctrl);
 
+// Uses uart to output the string char by char.
 void print(char* str);
+// "Clears" the screen to be able to print fresh new board.
 void clear_display();
 
 const unsigned char SPACE_X = 'X';
@@ -24,6 +33,7 @@ const unsigned char SPACE_EMPTY = ' ';
 
 const unsigned char CTRL_SIZE = 'a';
 
+// Board used for connect-four
 unsigned char board[7][6];
 unsigned char size;
 
@@ -49,19 +59,25 @@ sbit btn6 = P2^1;
 sbit btn7 = P0^3;
 sbit btn8 = P2^2;
 
+// Light upt his LED when someone wins.
 sbit o_led = P1^3;
 
-// Speaker
+// Speaker to play tunes.
 sbit speaker = P1^7;
 
+/*
+    Desc: main allows players to select a size and then compete against each other
+          by playing connect-four.
+    @params: none
+**/
 void main(void)
 {
 	unsigned char current_player = SPACE_O; // changed to SPACE_X at start
 
 	init();
-
+    // Play the main tune.
 	main_song();
-	
+	// Have user select size (difficulty)
 	size_select();
 
 	do
@@ -74,16 +90,17 @@ void main(void)
 		{
 			// swap players
 			current_player = (current_player == SPACE_X ? SPACE_O : SPACE_X);
-
+            // Changes the simon board to display X or O based on player turn.
 			led_control(current_player);
 			player_turn(current_player);
 			board_draw();
-
+            // If no one has won or if there is no draw keep on making turns.
 		} while (check_win(current_player) == 0 && (draw() == 0));
 
-		// print win message
+		// If neither player wins
 		if (draw() == 1)
 		{	
+		    // Plays a sad tune for both players as they lost.
 			play_note(0,5);
 		    play_note(11,5);
 		    play_note(8,5);
@@ -94,12 +111,13 @@ void main(void)
 		}
 		else
 		{
+		    // dododo you win! Play a happy tune for the winner.
 			play_note(9,9);
 			play_note(8,7);
 			play_note(12,5);
 			play_note(2,8);
 			play_note(4,8);
-
+            // Print the player char.
 			uart_transmit(current_player);
 			print(" wins! Press any button to play another game.\r\n");
 
@@ -115,8 +133,13 @@ void main(void)
 	
 }
 
+/*
+    Desc: Check if there is a draw between players.
+    @params: none
+**/
 unsigned char draw()
 {
+    // i and j are used to iterate over the board.
 	unsigned char i;
 	unsigned char j;
 	unsigned char draw = 1;
@@ -125,6 +148,8 @@ unsigned char draw()
 	{
 		for (j = 0; j < size - 1; j++)
 		{
+		    // If there is an available spot to place
+		    // there is no draw so set draw = 0 (false)
 			if (board[i][j] == SPACE_EMPTY)
 			{
 				draw = 0;
@@ -134,11 +159,15 @@ unsigned char draw()
 	return draw;
 }
 
+/*
+    Desc: Fill the board with spaces (' ')
+    @params: none
+**/
 void board_construct()
 {
 	unsigned char i;
 	unsigned char j;
-	
+    // Iterate over the board with the selected player size in mind and fill with spaces.	
 	for (i = 0; i < size; i++)
 	{
 		for (j = 0; j < size - 1; j++)
@@ -148,6 +177,10 @@ void board_construct()
 	}
 }
 
+/*
+    Desc: Display the board on the screen
+    @params: none
+**/
 void board_draw()
 {
 	unsigned char i;
@@ -155,9 +188,9 @@ void board_draw()
 
 	unsigned char length = 2 * size + 1;
 	unsigned char height = length - 2;
-
+    // Clearing the display because we want it to look like a fresh board with a piece falling down.
 	clear_display();
-	
+	// Give the board boarders and print the char of the board within the "boxes"
 	for (j=0; j < height; j++)
 	{
 		for (i=0; i < length; i++)
@@ -180,6 +213,11 @@ void board_draw()
 	
 }
 
+/*
+    Desc: Player turn reads user input.
+    @params: char player - To play the correct char in the board where the
+             player selects.
+**/
 void player_turn(unsigned char player)
 {
 	unsigned char i;
@@ -221,6 +259,11 @@ void player_turn(unsigned char player)
 	while (btn0&btn1&btn2&btn3&btn4&btn5&btn6&btn7&btn8);
 }
 
+/*
+    Desc: check_win checks if a player has any 4 in a row. It checks diagonal
+          and like a cross.
+    @params: char player - To check the correct character (X/O) and see if 4 in a row.
+**/
 unsigned char check_win(unsigned char player)
 {
 	unsigned char i;
@@ -296,6 +339,10 @@ unsigned char check_win(unsigned char player)
 	return 0;
 }
 
+/*
+    Desc: size select is our difficulty selector. The larger the board the harder.
+    @params: none
+**/
 void size_select(void)
 {
 	clear_display();
@@ -327,6 +374,10 @@ void size_select(void)
 
 }
 
+/*
+    Desc: initial is called and prepares uart and sets the pins to bidirectional.
+    @params: none
+**/
 void init()
 {
 
@@ -344,6 +395,10 @@ void init()
 
 }
 
+/*
+    Desc: Clear all LED's and then lights up either an X or O based on player.
+    @params: char ctrl - Dictates what to display, either player or main selection LEDs.
+**/
 void led_control(unsigned char ctrl)
 {
 	// clear LEDs
@@ -391,6 +446,11 @@ void led_control(unsigned char ctrl)
 	}
 }
 
+/*
+    Desc: Print the given message string. Is a lot better than spamming uart_transmit()
+    @params: char* str - A message, because it's easier to iterate over a char then
+             doing a million function calls.
+**/
 void print(char* str)
 {
 	unsigned char i;
@@ -400,11 +460,19 @@ void print(char* str)
 	}
 }
 
+/*
+    Desc: Clear's the screen. Magic to us.
+    @params: none
+**/
 void clear_display(void)
 {
 	print("\033[2J\033[H"); // literally magic
 }
 
+/*
+    Desc: Plays a song on startup, happy sounding tune.
+    @params: none
+**/
 void main_song()
 {
 	play_note(3,3);
@@ -422,7 +490,11 @@ void main_song()
 }
 
 
-
+/*
+    Desc: play's a note for a certain length of time. 
+    @params: char note - The note we want to play (A-G) at certain tones.
+             char numb_plays - How often the note will play.
+**/
 void play_note(unsigned char note, unsigned char numb_plays)
 {
     unsigned char i;
@@ -568,6 +640,11 @@ void play_note(unsigned char note, unsigned char numb_plays)
     }
     return;
 }
+
+/*
+    Desc: delay_counts uses timers to allow the speaker to play for longer.
+    @params: Waits with timer 0, using 16-bit timer mode
+**/
 void delay_counts(unsigned char low, unsigned char high)
 {
     if(low > 0 || high > 0)
